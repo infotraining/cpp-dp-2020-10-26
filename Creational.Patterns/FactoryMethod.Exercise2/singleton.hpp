@@ -22,4 +22,19 @@ public:
     }
 };
 
+// struct Logger
+// {
+//     void log(const std::string& logger) {}
+// };
+
+// TEST_CASE("")
+// {
+//     using SingletonLogger = SingletonHolder<Logger>;
+
+//     thread thd1{[] { SingletonLogger::instance().log("a"); }};
+//     thread thd2{[] { SingletonLogger::instance().log("a"); }};
+//     thd1.join();
+//     thd2.join();
+// }
+
 #endif // SINGLETON_HPP

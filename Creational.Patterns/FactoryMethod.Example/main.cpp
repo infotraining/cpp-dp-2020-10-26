@@ -3,6 +3,8 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <unordered_map>
+#include <typeindex>
 
 #include "rectangle.hpp"
 #include "shape.hpp"
@@ -34,11 +36,45 @@ unique_ptr<ShapeReaderWriter> create_shape_rw(Shape& shape)
     throw runtime_error("Unknown shape id");
 }
 
+namespace Refactoring
+{
+    using ShapeCreator = std::function<std::unique_ptr<Shape>()>;
+
+    class ShapeFactory
+    {
+        std::unordered_map<std::string, ShapeCreator> creators_;
+
+        auto create(const std::string& id)
+        {
+            return creators_.at(id)();
+        }
+        
+    };
+
+    using ShapeRWCreator = std::function<std::unique_ptr<ShapeReaderWriter>()>;
+
+    class ShapeRWFactory
+    {
+        std::unordered_map<std::type_index, ShapeRWCreator> creators_;
+
+        auto create(const std::string& id)
+        {
+            return creators_.at(id)();
+        }
+    };
+}
+
 class GraphicsDoc
 {
     vector<unique_ptr<Shape>> shapes_;
+    Refactoring::ShapeFactory& sf_;
+    Refactoring::ShapeRWFactory& srwf_;
 
 public:
+    GraphicsDoc(Refactoring::ShapeFactory& sf, Refactoring::ShapeRWFactory& srwf)
+        : sf_{sf}, srwf_{srwf}
+        {}
+
     void add(unique_ptr<Shape> shp)
     {
         shapes_.push_back(move(shp));
@@ -70,8 +106,8 @@ public:
 
             cout << "Loading " << shape_id << "..." << endl;
 
-            auto shape = create_shape(shape_id);
-            auto shape_rw = create_shape_rw(*shape);
+            auto shape = sf_.create(shape_id);
+            auto shape_rw = srwf_.create(*shape);
 
             shape_rw->read(*shape, file_in);
 
@@ -85,7 +121,7 @@ public:
 
         for (const auto& shp : shapes_)
         {
-            auto shape_rw = create_shape_rw(*shp);
+            auto shape_rw = srwf_.create(*shp);
             shape_rw->write(*shp, file_out);
         }
     }
@@ -95,7 +131,11 @@ int main()
 {
     cout << "Start..." << endl;
 
-    GraphicsDoc doc;
+    Refactoring::ShapeFactory shape_factory;
+    shape_factory.register(Rectangle::id, &std::make_unique<Rectangle>);
+    shape_factory.register(Square::id, &std::make_unique<Square>);
+
+    GraphicsDoc doc(shape_factory);
 
     doc.load("drawing.txt");
 
