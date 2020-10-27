@@ -5,7 +5,6 @@
 
 namespace Drawing
 {
-
     class Rectangle : public ShapeBase<Rectangle>
     {
         int width_, height_;
@@ -38,4 +37,5 @@ namespace Drawing
         void draw() const override;
     };
 }
+
 #endif // RECTANGLE_HPP
