@@ -26,6 +26,12 @@ public:
         : shape_factory_{shape_factory}
         , shape_rw_factory_{shape_rw_factory}
     {
+    } 
+
+    GraphicsDoc(GraphicsDoc const& other) : shape_factory_{other.shape_factory_}, shape_rw_factory_{other.shape_rw_factory_}
+    {
+        shapes_.reserve(other.shapes_.size());
+        for (auto const& shape : other.shapes_) shapes_.push_back(shape->clone());
     }
 
     void add(unique_ptr<Shape> shp)
