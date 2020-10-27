@@ -31,6 +31,9 @@ public:
 
     HtmlDocument get_report();
 
+
+
+
 private:
     HtmlDocument doc_;
 };

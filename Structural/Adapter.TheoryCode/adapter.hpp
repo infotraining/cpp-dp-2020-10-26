@@ -2,12 +2,14 @@
 #define ADAPTER_HPP_
 
 #include <iostream>
+#include <vector>
+#include <list>
 
 // "Target"
 class Target
 {
 public:
-    virtual void request() = 0;
+    virtual void request(const std::vector<int>& vec) = 0;
     virtual ~Target() = default;
 };
 
@@ -15,9 +17,12 @@ public:
 class Adaptee
 {
 public:
-    void specific_request()
+    void specific_request(const std::list<int>& lst)
     {
-        std::cout << "Called specific_request()" << std::endl;
+        std::cout << "Called specific_request(";
+        for(const auto& item : lst)
+            std::cout << item << " ";
+        std::cout << ")\n" << std::endl;
     }
 };
 
@@ -25,9 +30,10 @@ public:
 class ClassAdapter : public Target, private Adaptee
 {
 public:
-    void request() override
+    void request(const std::vector<int>& vec) override
     {
-        specific_request();
+        std::list<int> lst(vec.begin(), vec.end());
+        specific_request(lst);
     }
 };
 
@@ -43,9 +49,10 @@ public:
     {
     }
 
-    void request() override
+    void request(const std::vector<int>& vec) override
     {
-        adaptee_.specific_request();
+        std::list<int> lst(vec.begin(), vec.end());
+        adaptee_.specific_request(lst);
     }
 };
 

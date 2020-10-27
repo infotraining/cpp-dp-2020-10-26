@@ -77,4 +77,30 @@ int main()
 
     for (const auto& line : csv_doc)
         cout << line << endl;
+
+    cout << "///////////////////////////////////////////////////////////\n";
+
+    HtmlReportBuilder html_bld;
+    html_bld
+        .add_header("Title")
+        .begin_data()
+        .add_row({"1", "2", "3"})
+        .add_row({"1", "2", "3"})
+        .end_data()
+        .add_footer("Copyright");
+
+    std::cout << html_bld.get_report() << "\n";
+
+    cout << "///////////////////////////////////////////////////////////\n";
+
+    HtmlReportBuilder html_bld;
+    html_bld
+        .add_header("Title")
+        .begin_data()
+        .add_row({"1", "2", "3"})
+        .add_row({"1", "2", "3"})
+        .end_data()
+        .add_footer("Copyright");
+
+    std::cout << html_bld.get_report() << "\n";
 }
