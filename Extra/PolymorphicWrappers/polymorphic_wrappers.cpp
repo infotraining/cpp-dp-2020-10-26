@@ -9,21 +9,21 @@ class Shape
     // shape interface
     class IShape
     {
-      public:
+    public:
         virtual ~IShape() = default;
         virtual void move(int x, int y) = 0;
         virtual void draw() const = 0;
         virtual unique_ptr<IShape> clone() = 0;
     };
 
-    template <typename T>
+    template <typename ShapeT>
     class ShapeWrapper : public IShape
     {
-        T shape_;
+        ShapeT shape_;
 
-      public:
-        ShapeWrapper(const T& shp)
-            : shape_{shp}
+    public:
+        ShapeWrapper(const ShapeT& shp)
+            : shape_ {shp}
         {
         }
 
@@ -39,23 +39,23 @@ class Shape
 
         unique_ptr<IShape> clone() override
         {
-            return make_unique<ShapeWrapper<T>>(shape_);
+            return make_unique<ShapeWrapper<ShapeT>>(shape_);
         }
     };
 
-  public:
+public:
     template <typename T>
     Shape(const T& shp)
         : shape_(make_unique<ShapeWrapper<T>>(shp))
     {
     }
 
-    Shape(const Shape &src)
-        : shape_{src.shape_->clone()}
+    Shape(const Shape& src)
+        : shape_ {src.shape_->clone()}
     {
     }
 
-    Shape &operator=(const Shape &src)
+    Shape& operator=(const Shape& src)
     {
         Shape temp(src);
         swap(temp);
@@ -64,16 +64,16 @@ class Shape
     }
 
     template <class T>
-    Shape &operator=(T&& src)
+    Shape& operator=(T&& src)
     {
         Shape(std::forward<T>(src)).swap(*this);
         return *this;
     }
 
-    Shape(Shape &&) noexcept = default;
-    Shape &operator=(Shape &&) noexcept = default;
+    Shape(Shape&&) noexcept = default;
+    Shape& operator=(Shape&&) noexcept = default;
 
-    void swap(Shape &other)
+    void swap(Shape& other)
     {
         shape_.swap(other.shape_);
     }
@@ -88,7 +88,7 @@ class Shape
         shape_->move(x, y);
     }
 
-  private:
+private:
     unique_ptr<IShape> shape_;
 };
 
@@ -98,7 +98,9 @@ struct Circle
     int r;
 
     Circle(int x, int y, int r)
-        : x{x}, y{y}, r{r}
+        : x {x}
+        , y {y}
+        , r {r}
     {
     }
 
@@ -120,7 +122,9 @@ struct Square
     int size;
 
     Square(int x, int y, int r)
-        : x{x}, y{y}, size{r}
+        : x {x}
+        , y {y}
+        , size {r}
     {
     }
 
@@ -140,10 +144,10 @@ class GraphicDocs
 {
     vector<Shape> shapes_;
 
-  public:
+public:
     GraphicDocs() = default;
 
-    GraphicDocs(const vector<Shape> &shapes)
+    GraphicDocs(const vector<Shape>& shapes)
         : shapes_(shapes)
     {
     }
@@ -155,12 +159,12 @@ class GraphicDocs
 
     void render()
     {
-        for (const auto &shp : shapes_)
+        for (const auto& shp : shapes_)
             shp.draw();
     }
 };
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     auto c = Circle(1, 2, 10);
 
@@ -177,12 +181,12 @@ int main(int argc, char *argv[])
 
     cout << "\n\n";
 
-    vector<Shape> shapes = {shp1, shp2, Circle(100, 200, 2), Square{10, 20, 300}};
+    vector<Shape> shapes = {shp1, shp2, Circle(100, 200, 2), Square {10, 20, 300}};
 
     shp1.move(10, 1000);
     shp1.draw();
 
-    for (const auto &shp : shapes)
+    for (const auto& shp : shapes)
         shp.draw();
 
     cout << "\n\n";
