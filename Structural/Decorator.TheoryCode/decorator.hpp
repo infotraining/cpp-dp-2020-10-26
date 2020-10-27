@@ -42,7 +42,7 @@ public:
 
     void operation() override
     {
-        component_->operation();
+        component_->operation();  // delegation
     }
 };
 
