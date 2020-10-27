@@ -4,6 +4,18 @@
 #include "monsters.hpp"
 #include <memory>
 
+namespace FactoryMethod
+{
+    class Shape;
+
+    class ShapeCreator
+    {
+    public:
+        virtual std::unique_ptr<Shape> create_shape() = 0;
+        virtual ~ShapeCreator() = default;
+    };
+}
+
 namespace Game
 {
     class AbstractEnemyFactory

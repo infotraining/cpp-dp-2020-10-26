@@ -11,6 +11,18 @@
 
 #include "enemy_factory.hpp"
 
+namespace FactoryMethod
+{
+    class Shape;
+
+    class ShapeCreator
+    {
+    public:
+        virtual std::unique_ptr<Shape> create_shape() = 0;
+        virtual ~ShapeCreator() = default;
+    };
+}
+
 namespace Game
 {
     enum class GameLevel
@@ -27,7 +39,7 @@ namespace Game
 
     public:
         GameApp(const std::mt19937& rnd_gen)
-            : rnd_gen_{rnd_gen}
+            : rnd_gen_ {rnd_gen}
         {
         }
 
