@@ -11,17 +11,7 @@
 
 #include "enemy_factory.hpp"
 
-namespace FactoryMethod
-{
-    class Shape;
 
-    class ShapeCreator
-    {
-    public:
-        virtual std::unique_ptr<Shape> create_shape() = 0;
-        virtual ~ShapeCreator() = default;
-    };
-}
 
 namespace Game
 {
