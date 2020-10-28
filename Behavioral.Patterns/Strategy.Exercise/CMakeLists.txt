@@ -8,9 +8,9 @@ project(${PROJECT_NAME_STR})
 # set compiler
 #----------------------------------------
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    add_definitions(-std=c++14)
+    add_definitions(-std=c++17)
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    add_definitions(-Wall -std=c++14)
+    add_definitions(-Wall -std=c++17)
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     add_definitions(-D_SCL_SECURE_NO_WARNINGS)
 endif()

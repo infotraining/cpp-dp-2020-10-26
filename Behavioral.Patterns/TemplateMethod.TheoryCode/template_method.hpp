@@ -4,6 +4,42 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <numeric>
+#include <vector>
+
+namespace GTest_FactoryMethod
+{
+    class Test
+    {
+    public:
+        void run_test()
+        {
+            set_up();
+            run();
+            teardown();
+        }
+    protected:
+        virtual void set_up() = 0;
+        virtual void teardown() = 0;
+        virtual void run() {}
+    };
+
+    class OurFixture : public Test
+    {   
+        std::vector<int> vec_;
+    protected:
+        void set_up() override
+        {
+            vec_.resize(1'000'000);
+            std::iota(begin(vec_), end(vec_), 0);
+        }
+
+        void teardown() override
+        {
+            vec_.clear();
+        }
+    };
+}
 
 class Service
 {
